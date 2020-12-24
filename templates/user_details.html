@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<div class="row ml-5">
+  <div class="col-3">
+    <img src="{{user.image_url}}" class="img-fluid img-thumbnail rounded" alt="" style="width: 200px">
+    <p>Date Created: {{user.date_created}}</p>
+  </div>
+  <div class="col-9">
+    <div class="row">
+      <h5>{{user.first_name}} {{user.last_name}}</h5>
+    </div>
+    <div class="row">
+      <a href="/users/{{user.id}}/edit" class="btn btn-primary">Edit</a>
+      <form action="/users/{{user.id}}/delete", method="POST">
+        <button class="btn btn-danger ml-2">Delete</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
