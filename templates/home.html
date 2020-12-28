@@ -4,6 +4,13 @@
 <div class="container">
   <div class="row">
     <div class="col text-center">
+      <h4 class="display-4">Recent Posts</h4>
+      {% for post in posts %}
+      <h5 class="display-5">{{post.title}}</h5>
+      <p>{{post.content}}</p>
+      <p>By {{post.users.full_name}}
+        on {{post.created_at.strftime('%Y-%m-%d %H:%M')}}</p>
+      {% endfor %}
       <form action="/users">
         <button class="btn btn-secondary">To Users</button>
       </form>

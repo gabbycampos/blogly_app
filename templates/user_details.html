@@ -16,6 +16,17 @@
         <button class="btn btn-danger ml-2">Delete</button>
       </form>
     </div>
+    <h6 class="display-4 mt-5">Posts</h6>
+    <div class="row">
+      <ul>
+        {% for post in posts %}
+        <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <form action="/users/{{user.id}}/posts/new">
+      <button class="btn btn-primary">Add Post</button>
+    </form>
   </div>
 </div>
 {% endblock %}

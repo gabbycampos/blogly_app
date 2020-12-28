@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<h4 class="display-4">{{post.title}}</h4>
+<div class="container">
+  <p>
+    {{post.content}}
+  </p>
+  <p class="font-italic">By {{user.full_name}}</p>
+  <div class="row">
+    <a href="/users/{{user.id}}" class="btn btn-outline-primary">Cancel</a>
+    <a href="/posts/{{post.id}}/edit" class="btn btn-primary ml-2">Edit</a>
+    <form action="/posts/{{post.id}}/delete" method="POST">
+      <button class="btn btn-danger ml-2">Delete</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

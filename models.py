@@ -34,3 +34,19 @@ class User(db.Model):
     
     def __repr__(self):
         return f'{self.full_name} {self.image_url} has been created successfully! Date: {self.date_created}'
+
+class Post(db.Model):
+    __tablename__ = "posts" 
+
+    id = db.Column(db.Integer, primary_key = True, autoincrement=True)
+    title = db.Column(db.String(100), nullable = False)
+    content = db.Column(db.Text, nullable = False)
+    created_at = db.Column(db.DateTime, default = datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    #relationships
+    users = db.relationship("User", backref=db.backref("posts", cascade="all,delete"))
+
+    def __repr__(self):
+        return f'<Post: {self.title}, {self.content}, {self.created_at}>'
+        
