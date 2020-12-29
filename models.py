@@ -12,7 +12,7 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
-DEFAULT_IMAGE = "https://images.unsplash.com/photo-1584389839701-ddcd904f0546?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80"
+DEFAULT_IMAGE = "/static/images/default.jpg"
 
 def connect_db(app):
     db.app = app
@@ -50,3 +50,17 @@ class Post(db.Model):
     def __repr__(self):
         return f'<Post: {self.title}, {self.content}, {self.created_at}>'
         
+class Tag(db.Model):
+    __tablename__ = "tags" 
+
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    name = db.Column(db.String(25), unique = True)
+
+    # relationships
+    posts = db.relationship("Post", secondary="posts_tags", backref=db.backref("tags"))
+
+class PostTag(db.Model):
+    __tablename__ = "posts_tags"
+
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), primary_key=True, nullable=False)
+    tag_id = db.Column(db.Integer, db.ForeignKey("tags.id"), primary_key=True, nullable=False)

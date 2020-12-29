@@ -2,7 +2,7 @@
 
 from flask import Flask, request, render_template, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 
 app = Flask(__name__)
 
@@ -83,15 +83,21 @@ def edit_user(user_id):
 @app.route('/users/<int:user_id>/posts/new')
 def create_post(user_id):
     user = User.query.get_or_404(user_id)
-    return render_template('add_post.html', user=user)
+    tags = Tag.query.all()
+    return render_template('add_post.html', user=user, tags=tags)
 
 @app.route('/users/<int:user_id>/posts/new', methods=["POST"])
 def add_post(user_id):
     title = request.form['title']
     content = request.form['content']
+    tags = request.form.getlist('tags')
     new_post = Post(title=title, content=content, user_id=user_id)
 
     db.session.add(new_post)
+    for tag in tags:
+        tag_query = Tag.query.filter(Tag.name == tag).first()
+        tag_obj = Tag.query.get(tag_query.id)
+        tag_obj.posts.append(new_post)
     db.session.commit()
     return redirect('/users')
 
@@ -104,16 +110,22 @@ def show_post(post_id):
 @app.route("/posts/<int:post_id>/edit")
 def edit_form_post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template("edit_post.html", post=post)
+    tags = Tag.query.all()
+    return render_template("edit_post.html", post=post, tags=tags)
 
 @app.route("/posts/<int:post_id>/edit", methods=["POST"])
 def edit_post(post_id):
     title = request.form["title"]
     content = request.form["content"]
+    tags = request.form.getlist('tags')
  
     post = Post.query.get(post_id)
     post.title = title
     post.content = content
+    post.tags.clear()
+    for tag in tags:
+        tag_obj = Tag.query.filter(Tag.name == tag).first()
+        post.tags.append(tag_obj)
     
     db.session.commit()
     return redirect('/users')
@@ -124,3 +136,44 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     return redirect('/users')
+
+""" Tags """ 
+@app.route('/tags')
+def list_tags():
+    tags = Tag.query.all()
+    return render_template('tags.html', tags=tags)
+
+@app.route('/tags/<int:tag_id>')
+def show_tag_posts(tag_id):
+    tag = Tag.query.get(tag_id)
+    return render_template('tag_details.html', tag=tag)
+
+@app.route('/tags/new')
+def create_tag():
+    return render_template('add_tag.html')
+
+@app.route('/tags/new', methods=["POST"])
+def add_tag():
+    tag_name = request.form["tag_name"]
+    new_tag = Tag(name=tag_name.lower().title())
+    
+    db.session.add(new_tag)
+    db.session.commit()
+    return redirect('/tags')
+
+@app.route('/tags/<int:tag_it>/edit', methods=["POST"])
+def edit_tag(tag_id):
+    tag_name = request.form["tag_name"]
+    tag = Tag.query.get(tag_id)
+
+    tag.name = tag_name
+    db.session.commit()
+
+    return redirect('/tags')
+
+@app.route('/tags/<int:tag_id>/delete', methods=["POST"])
+def delete_tag(tag_id):
+    tag = Tag.query.get(tag_id)
+    db.session.delete(tag)
+    db.session.commit()
+    return redirect('/tags')

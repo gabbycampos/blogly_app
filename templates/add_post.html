@@ -15,6 +15,10 @@
           <label for="content">Content</label>
           <textarea id="content" rows="4" style="vertical-align: middle" name="content"></textarea>
         </div>
+        {% for tag in tags %}
+        <input type="checkbox" id="{{tag.name}}" name="tags" value="{{tag.name}}">
+        <label for="{{tag.name}}">{{tag.name}}</label><br>
+        {% endfor %}
         <a href="/users/{{user.id}}" class="btn btn-info btn-lg">Cancel</a>
         <button class="btn btn-success btn-lg" type="submit">Add</button>
       </form>

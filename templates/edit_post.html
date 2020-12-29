@@ -13,6 +13,15 @@
         <label for="content">Content</label>
         <textarea id="content" rows="3" style="vertical-align: middle" name="content">{{post.content}}</textarea>
       </div>
+      {% for tag in tags %}
+      {% if tag in post.tags %}
+        <input type="checkbox" id="{{tag.name}}" name="tags" value="{{tag.name}}" checked>
+        <label for="{{tag.name}}">{{tag.name}}</label><br>
+      {% else %}
+      <input type="checkbox" id="{{tag.name}}" name="tags" value="{{tag.name}}">
+      <label for="{{tag.name}}">{{tag.name}}</label><br>
+        {% endif %}
+      {% endfor %}
       <a href="/posts/{{post.id}}" class="btn btn-outline-success btn-lg">Cancel</a>
       <button class="btn btn-outline-info btn-lg" type="submit">Edit</button>
     </form>

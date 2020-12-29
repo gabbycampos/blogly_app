@@ -7,6 +7,13 @@
     {{post.content}}
   </p>
   <p class="font-italic">By {{user.full_name}}</p>
+  <p><b>Tags: </b>
+    {% for tag in post.tags%}
+    <span class="badge badge-primary" role="alert">
+      <em>{{tag.name}}</em>
+    </span>
+    {% endfor %}
+  </p>
   <div class="row">
     <a href="/users/{{user.id}}" class="btn btn-outline-primary">Cancel</a>
     <a href="/posts/{{post.id}}/edit" class="btn btn-primary ml-2">Edit</a>
