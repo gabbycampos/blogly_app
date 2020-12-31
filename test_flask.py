@@ -68,15 +68,6 @@ class UserViewsTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('<h5>TestFirst2 TestLast2</h5>', html)
 
-    def test_delete_user(self):
-        with app.test_client() as client:
-            user = User(first_name="TestFirst3", last_name="TestLast3", image_url="https://images.unsplash.com/photo-1570481662006-a3a1374699e8?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8ZG9scGhpbnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60")
-            db.session.add(user)
-            resp = client.post(f'/users/{self.user_id}/delete', follow_redirects=True)
-            html = resp.get_data(as_text=True)
-            self.assertEqual(resp.status_code, 200)
-
-
     def test_post_detail(self):
         with app.test_client() as client:
             resp = client.get(f"/posts/{self.post_id}")
@@ -93,4 +84,11 @@ class UserViewsTestCase(TestCase):
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn('<h4 class="display-4">New Post 2</h4>', html)
+
+    def test_delete_user(self):
+        with app.test_client() as client:
+            user = User(first_name="TestFirst3", last_name="TestLast3", image_url="https://images.unsplash.com/photo-1570481662006-a3a1374699e8?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8ZG9scGhpbnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60")
+            db.session.add(user)
+            resp = client.post(f'/users/{self.user_id}/delete', follow_redirects=True)
+            html = resp.get_data(as_text=True)
+            self.assertEqual(resp.status_code, 200)
