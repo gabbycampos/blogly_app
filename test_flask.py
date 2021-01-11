@@ -22,6 +22,7 @@ class UserViewsTestCase(TestCase):
     def setUp(self):
         """ Add Sample user """
 
+        Post.query.delete()
         User.query.delete()
 
         user = User(first_name="TestFirst", last_name="TestLast", image_url="https://images.unsplash.com/photo-1522521612083-730fb19791c1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80")

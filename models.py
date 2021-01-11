@@ -10,9 +10,11 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+DEFAULT_IMAGE = "https://images.unsplash.com/photo-1584389839701-ddcd904f0546?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1267&q=80"
+#DEFAULT_IMAGE = '/static/images/default.jpg'
+
 db = SQLAlchemy()
 
-DEFAULT_IMAGE = "/static/images/default.jpg"
 
 def connect_db(app):
     db.app = app
@@ -34,6 +36,11 @@ class User(db.Model):
     
     def __repr__(self):
         return f'{self.full_name} {self.image_url} has been created successfully! Date: {self.date_created}'
+
+    def photo_url(self):
+        """Return image for user: URL or default."""
+
+        return self.image_url or DEFAULT_IMAGE
 
 class Post(db.Model):
     __tablename__ = "posts" 
